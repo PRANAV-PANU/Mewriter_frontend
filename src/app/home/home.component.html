@@ -1,0 +1,175 @@
+<div class="mainDiv" width="100%">
+    <section id="title">
+        <!-- Nav Bar -->
+        <div>
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <a id="navbar_brand" class="navbar-brand text-white" href="">MeWriter</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" routerLink="/home" id="navbar">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="getToFooter()" id="navbar">About us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="getToFooter()" id="navbar">Contact us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="openLoginDialog()" id="navbar">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
+    <!-- cover photo -->
+    <div class="bannerdiv">
+        <img src="../assets/cover.jpg" alt="Banner Image" width="100%" height="300">
+    </div>
+
+    <!-- languages options -->
+    <div *ngIf="languageVisible">
+
+        <div class="row" id="language">
+            <div class="col text-center" *ngFor="let language of languages[0].language">
+                <p id="lang" class="text-white" (click)="onSelect(language.languageName)">{{language.languageName}}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Middle Body -->
+    <br>
+    <div *ngIf="categoryVisible" class="row" id="center">
+
+        <div class="col-md-9 col-lg-3">
+            <table class="center">
+                <div class="center-div">
+                    <h1>{{languageName}}</h1>
+                </div>
+                <div class="tr-row">
+                    <tr *ngFor="let category of categories[0].category">
+                        <td>
+                            <h5 class="td-row" (click)="onChoose(category.categoryName)">
+                                {{category.categoryName}}
+                            </h5>
+                        </td>
+                    </tr>
+                </div>
+
+            </table>
+
+        </div>
+        <div class="col-lg-6">
+            <div *ngIf="postVisible">
+                <div *ngFor="let post of posts[0].allPosts">
+                    <div class="card">
+                        <div class="card-header text-white" (click)="onSelection(post.postTitle)">
+                            <h1>{{post.postTitle}}</h1>
+                        </div>
+                        <div class="card-body">
+                            <p class="content">{{post.content}}</p>
+                            <h6>Posted By :- {{post.postedByUser}}</h6>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn" *ngIf="!isDisabled" (click)="increaseLikes(post.postTitle)">
+                                        <mat-icon>thumb_up_alt</mat-icon>{{post.postLikes}}
+                                    </button>
+                                    <button class="btn" [disabled]="isDisabled" *ngIf="isDisabled" (click)="increaseLikes(post.postTitle)" >
+                                        <mat-icon>thumb_up_alt</mat-icon>{{post.postLikes+1}}
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn" (click)="increaseDislikes()">
+                                        <mat-icon>thumb_down_alt</mat-icon>
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn" (click)="pressShare()">
+                                        <mat-icon>share</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- footer  section -->
+    <footer id="footer" class="bg-light text-center text-lg-start">
+
+        <!-- Grid container -->
+        <div class="container p-4">
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">AbouT US</h5>
+
+                    <p>
+                        Platform for writers only
+                    </p>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Contact Us</h5>
+                    <p>Email: mewriters@gmail.com</p>
+
+                    <p><a href="https://www.facebook.com/कारवाँ-104945152196367/">Facebook</a></p>
+                    <p><a href="https://www.instagram.com/p/CdbXW-0h9Vl/?igshid=MDJmNzVkMjY=">Instagram</a></p>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+        <!-- Grid container -->
+    </footer>
+
+    <div class="modal fade" id="loginModal" role="dialog" placement="top">
+        <div class="modal-dialog modal-centered-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-uppercase" id="modal-title">Login</h3>
+                </div>
+                <form #loginForm="ngForm" ngNativeValidate (submit)="loginUserValues(loginForm)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="Email">Email Address</label>
+                            <input class="form-control" type="email" placeholder="Enter Email" ngModel name="email" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input class="form-control" type="password" placeholder="Enter Password" ngModel required minlength="8"
+                                name="password"/>
+                        </div>
+                    </div>
+                    <div *ngIf="userVisible"><h5 class="text-center" style="color: red;">Enter Correct Credentials</h5></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" (click)="closeLoginModal()">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>

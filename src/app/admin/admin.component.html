@@ -1,0 +1,165 @@
+<div *ngIf="isLoggedIn" class="mainDiv" width="100%">
+    <section id="title">
+        <!-- Nav Bar -->
+        <div>
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <a id="navbar_brand" class="navbar-brand text-white" href="">MeWriter</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="home()" id="navbar">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="getToFooter()" id="navbar">About us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="getToFooter()" id="navbar">Contact us</a>
+                        </li>
+                        <li *ngIf="isAdmin" class="nav-item">
+                            <a class="nav-link" (click)="openDialog()" id="navbar">Delete Post</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" (click)="logout()" id="navbar">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
+    <!-- cover photo -->
+    <div class="bannerdiv">
+        <img src="../assets/cover.jpg" alt="Banner Image" width="100%" height="300">
+    </div>
+
+    <div class="form-div">
+        <h3>ADD POST</h3>
+        <form #addPostForm="ngForm" ngNativeValidate (submit)="addPost(addPostForm)" action="">
+            <div class="form-group">
+                <label for="title">Post Title</label>
+                <input type="text" placeholder="Enter Title" class="form-control" ngModel name="postTitle" required />
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="name">User Name</label>
+                <input placeholder="Enter Title" class="form-control" ngModel name="postedByUser" required />
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="postTitle">Content</label>
+                <textarea placeholder="Enter Title" class="form-control" ngModel name="content" required></textarea>
+            </div>
+            <br>
+            <div class="form-group">
+                <label>Langauge</label>
+                <div class="form-control">
+                    <label class="radio-inline">
+                        <input type="radio" name="languageName" value="English" ngModel required/>
+                        English
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="languageName" value="Hindi" ngModel/>
+                        Hindi
+                    </label>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+
+                <label for="category">Category</label>
+                <select class="custom-select form-control" ngModel name="categoryName" required>
+                    <option selected>Select Category</option>
+                    <option *ngFor="let category of categoryList">{{category}}</option>
+                </select>
+            </div>
+
+            <br>
+            <button class="btn btn-primary btn-large" type="submit">Submit</button>
+        </form>
+    </div>
+
+    <footer id="footer" class="bg-light text-center text-lg-start">
+
+        <!-- Grid container -->
+        <div class="container p-4">
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">AbouT US</h5>
+
+                    <p>
+                        Platform for writers only
+                    </p>
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Contact Us</h5>
+                    <p>Email: mewriters@gmail.com</p>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+        <!-- Grid container -->
+    </footer>
+
+    <div class="modal fade" id="searchTitleModal" role="dialog" placement="top">
+        <div class="modal-dialog modal-centered-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Search Title</h5>
+                </div>
+                <form #searchpost="ngForm" ngNativeValidate (submit)="searchPost(searchpost)">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title">PostTitle</label>
+                            <input type="text" class="form-control" placeholder="Enter title to be deleted" ngModel
+                                name="postTitle" required />
+                        </div>
+                    </div>
+                    <div *ngIf="isHidden">
+                        <h6>Enter correct Post Title</h6>
+                    </div>
+                    <div>
+                        <h6 *ngIf="showVisible">Post Found with title {{this.postTitle}}</h6>
+                    </div>
+                    <div>
+                        <h6 *ngIf="deleteVisible">Post deleted with title {{this.postTitle}}</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+                <button *ngIf="showVisible" class="btn btn-primary" (click)="deletePost()">Delete Post</button>
+                <button class="btn btn-danger" (click)="close()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="logoutModal" role="dialog" placement="top">
+        <div class="modal-dialog modal-centered-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Logout</h5>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you want to logout ?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" (click)="logoutClose()">No</button>
+                    <button class="btn btn-primary" type="submit" (click)="logoff()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!isLoggedIn" class="errorDiv" width ="100%">
+    <h6>Return to <a routerLink="/home">Homepage</a></h6>
+</div>
